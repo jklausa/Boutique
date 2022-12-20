@@ -62,11 +62,13 @@ public final class Store<Item: Codable & Equatable>: ObservableObject {
     ///   - storage: A `StorageEngine` to initialize a ``Store`` instance with.
     ///   - cacheIdentifier: A `KeyPath` from the `Item` pointing to a `String`, which the ``Store``
     ///   will use to create a unique identifier for the item when it's saved.
-    public init(storage: StorageEngine, cacheIdentifier: KeyPath<Item, String>) {
+    public init(storage: StorageEngine, defaultItems: [Item] = [], cacheIdentifier: KeyPath<Item, String>) {
         self.storageEngine = storage
         self.cacheIdentifier = cacheIdentifier
 
         Task { @MainActor in
+            self.items = defaultItems
+
             do {
                 let decoder = JSONDecoder()
                 self.items = try await self.storageEngine.readAllData()
