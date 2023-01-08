@@ -93,10 +93,7 @@ public struct StoredValue<Item: Codable & Equatable> {
         let boxedValue = BoxedValue(value: value)
         if let data = try? JSONEncoder().encode(boxedValue) {
             self.userDefaults.set(data, forKey: self.key)
-
-            Task { @MainActor in
-                self.itemSubject.send(value)
-            }
+            self.itemSubject.send(value)
         }
     }
 
@@ -124,10 +121,7 @@ public struct StoredValue<Item: Codable & Equatable> {
         let boxedValue = BoxedValue(value: self.defaultValue)
         if let data = try? JSONEncoder().encode(boxedValue) {
             self.userDefaults.set(data, forKey: self.key)
-
-            Task { @MainActor in
-                self.itemSubject.send(self.defaultValue)
-            }
+            self.itemSubject.send(self.defaultValue)
         }
     }
 
